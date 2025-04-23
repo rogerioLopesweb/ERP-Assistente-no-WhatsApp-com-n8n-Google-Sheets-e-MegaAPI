@@ -4,6 +4,9 @@ Este projeto transforma o WhatsApp em um *assistente virtual ERP inteligente*, i
 
 ---
 
+![image](https://github.com/user-attachments/assets/c9b2c58c-e23c-41c4-a4e7-11d5b71c621d)
+
+
 ## 🚀 Funcionalidades principais
 
 ### 👤 Jornada do Cliente
