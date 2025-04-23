@@ -1,0 +1,3297 @@
+{
+  "name": "ERP_Assistente",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "megaapi",
+        "options": {}
+      },
+      "id": "b630bf18-a319-47a3-9486-a9c844d11f3f",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1080,
+        -60
+      ],
+      "webhookId": "22806792-4fcd-47f9-b949-16213fdb7ac5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1db7e6c3-867f-424f-ac70-2a08f6edf5c1",
+              "leftValue": "={{ $json.body.isEdit }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "528e0ba9-57b0-4394-864a-3aa5a2cb6067",
+              "leftValue": "={{ $json.body.isGroup }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "74ab4d88-a459-4dd7-a64a-47aa545fd4c6",
+              "leftValue": "={{ $json.body.broadcast }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "b3a6533b-d00b-4c8e-b7e6-92974d9cd095",
+              "leftValue": "={{ $json.body.isNewsletter }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8f2b6ac6-3c82-45f7-96e4-885795be5e66",
+              "leftValue": "={{ $json.body.fromApi }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "3d224a33-4379-4512-b88b-e7f6393406c6",
+              "leftValue": "={{ $json.body.key.fromMe }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -880,
+        -60
+      ],
+      "id": "85cc67a1-5b4c-4229-a253-a4dcaac83c1e",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $json.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -460,
+        -60
+      ],
+      "id": "b376979d-faca-4070-8414-a97f8ae75d7d",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "900fbd3b-028f-4056-a0b2-08bb93917fac",
+              "name": "Nome",
+              "value": "={{ $json.body.pushName.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "a65d11f5-7cbc-440b-bb42-8679e4d438ff",
+              "name": "Telefone",
+              "value": "={{ $json.body.key.remoteJid.split('@')[0].replace(/\\D/g, '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "c818ba59-efff-4353-ac87-ec0a00b9323d",
+              "name": "Mensagem",
+              "value": "={{ $json.body.message?.conversation || $json.body.message?.extendedTextMessage?.text || \"Mensagem não encontrada\" }}",
+              "type": "string"
+            },
+            {
+              "id": "bc88935e-1305-437a-bc02-f78c7474b4cd",
+              "name": "TipoMsg",
+              "value": "={{ $json.body.messageType }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -680,
+        -60
+      ],
+      "id": "f7297ed6-644a-425b-8cc0-bd3e40e34cb1",
+      "name": "Dados"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Etapa": "menu_cliente ",
+            "Telefone": "={{ $('SwitchClienteEtapa').item.json.Telefone }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Etapa",
+              "displayName": "Etapa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1760,
+        -900
+      ],
+      "id": "ea376679-9e1f-42d5-ac22-032a2dc94c12",
+      "name": "Atualiza Etapa Cliente",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Tipo }}",
+                    "rightValue": "cliente",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "68339b3c-187d-4786-a33a-b1c03853e9ef"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cliente"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b174656e-89cf-4ee5-b5d6-4f29e562e850",
+                    "leftValue": "={{ $json.Tipo }}",
+                    "rightValue": "vendedor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Vendedor"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -240,
+        -60
+      ],
+      "id": "06682360-6a60-4753-93ec-9433a6070b58",
+      "name": "SwitchTipo"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Etapa }}",
+                    "rightValue": "inicio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "c5bd0be7-bc00-40c3-9df8-d9d71d610595"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Inicio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "928978f5-1f25-4cbd-b42e-0b1bf787024c",
+                    "leftValue": "={{ $json.Etapa }}",
+                    "rightValue": "menu_cliente",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Menu cliente"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0ade643d-1562-45e8-88c6-aa96186c02f5",
+                    "leftValue": "={{ $json.Etapa }}",
+                    "rightValue": "cliente_informar_ocorrencia",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ocorrencia"
+            }
+          ]
+        },
+        "options": {
+          "allMatchingOutputs": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        880,
+        -780
+      ],
+      "id": "9737bdc3-50d3-4915-9203-6625c2f24f4b",
+      "name": "SwitchClienteEtapa"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Dados').first().json.Mensagem }}",
+                    "rightValue": "1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "52067cb6-7e32-4446-80e2-b556b32d6601"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Consultar pedidos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d2d5ce13-18d2-46e8-8899-5d4db42fbd28",
+                    "leftValue": "={{ $('Dados').first().json.Mensagem }}",
+                    "rightValue": "2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Segunda via de boleto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "94bc8f39-cfb2-44d6-8a37-90aca4c00289",
+                    "leftValue": "={{ $('Dados').first().json.Mensagem }}",
+                    "rightValue": "3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Registrar uma ocorrência"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra",
+          "allMatchingOutputs": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1320,
+        -660
+      ],
+      "id": "54082125-dc5e-4dc9-b809-f05aa2b566f4",
+      "name": "SwitchEscolhaMenuCliente",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "pedidos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "CNPJ_CPF",
+              "lookupValue": "={{ $('SwitchClienteEtapa').item.json.ID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1640,
+        -680
+      ],
+      "id": "3c2c0011-8795-4244-ae83-481a5c608de0",
+      "name": "Busca Pedidos",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=✅ Identificamos você como *Cliente {{ $json.Nome }}*\n\nComo posso ajudar?\n1️⃣ Consultar pedidos  \n2️⃣ Segunda via de boleto  \n3️⃣ Registrar uma ocorrência\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1320,
+        -860
+      ],
+      "id": "656f8610-967d-438c-958e-3c337d4ebe72",
+      "name": "Formata Envia Menu Cliente"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        -900
+      ],
+      "id": "dba6ba53-4e63-41c1-aa95-530a0f255736",
+      "name": "Enviar Envia Menu Cliente"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.Mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2060,
+        -680
+      ],
+      "id": "c3a65b03-de3f-41a0-8a9b-62f96c86aa67",
+      "name": "Enviar Pedidos"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 424155726,
+          "mode": "list",
+          "cachedResultName": "boletos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=424155726"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "CNPJ_CPF",
+              "lookupValue": "={{ $('SwitchEscolhaMenuCliente').item.json.ID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1860,
+        -520
+      ],
+      "id": "14665e72-5a0d-4d8f-b41c-dabc06894d06",
+      "name": "Busca Segunda via de boleto",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.Mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2300,
+        -520
+      ],
+      "id": "47a91157-a4dc-4cdc-ab2d-0c3044a228db",
+      "name": "Enviar Segunda Via do Boleto"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1860,
+        -360
+      ],
+      "id": "bcae8d1f-e9eb-45c6-89dc-0486cf6a8e7b",
+      "name": "Enviar Informe sua ocorrência"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Etapa": "cliente_informar_ocorrencia",
+            "Telefone": "={{ $('SwitchClienteEtapa').item.json.Telefone }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Etapa",
+              "displayName": "Etapa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2060,
+        -360
+      ],
+      "id": "aa44bed1-c802-47c8-8c32-facf87a459c2",
+      "name": "Atualiza Etapa Informa Ocorrência",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Etapa": "menu_cliente ",
+            "Telefone": "={{ $('Dados').first().json.Telefone }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Etapa",
+              "displayName": "Etapa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2640,
+        -600
+      ],
+      "id": "1e248374-93c7-4eb5-a64f-8e2798aa21b7",
+      "name": "Atualiza Etapa Cliente Inicio",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2120,
+        -180
+      ],
+      "id": "89814082-97d2-4587-8440-baf1162dc0ff",
+      "name": "Enviar Confirmação registro ocorrência"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=✅ OI {{ $json.Nome }}*\n\nInforme sua ocorrência",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1640,
+        -360
+      ],
+      "id": "1e13e1fc-49f1-47ca-b581-1c7e26780f24",
+      "name": "Formata Mensagem Informe sua ocorrência"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=✅ Oi *{{ $json.Nome }}*\n\nSua ocorrêcia foi registrado sucesso, em breve você receberá mais informações.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1900,
+        -180
+      ],
+      "id": "714343c3-9f90-42f0-af38-cdfd57eed68c",
+      "name": "Formata Mensagem Confirmação Ocorrência"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 54455918,
+          "mode": "list",
+          "cachedResultName": "ocorrencias",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=54455918"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Data": "={{ $json.Data }}",
+            "Tipo": "={{ $json.Tipo }}",
+            "ID Usuário": "={{ $json.ID }}",
+            "Descrição": "={{ $json['Descrição'] }}",
+            "Status": "={{ $json.Status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID Usuário",
+              "displayName": "ID Usuário",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descrição",
+              "displayName": "Descrição",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1700,
+        -180
+      ],
+      "id": "4bcd495f-cf9b-47f8-b011-e95ab2eb67c8",
+      "name": "Cadastra uma ocorrência",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const pedidos = items;\nlet mensagem = '📦 *Aqui estão seus últimos pedidos:*\\n\\n';\n\nfor (const item of pedidos) {\n  const p = item.json;\n  mensagem += `• Pedido #${p[\"Pedido Nº\"]} – R$ ${p.Valor} – ${p.Status} (${p.Data})\\n`;\n}\n\nreturn [{\n  json: {\n    Mensagem: mensagem\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1860,
+        -680
+      ],
+      "id": "9392ec4e-21fe-4270-bfd9-02d47f4f12ea",
+      "name": "Format Mensagem Pedidos"
+    },
+    {
+      "parameters": {
+        "jsCode": "const boletos = items;\nlet mensagem = '📄 *Segunda via de boletos disponíveis:*\\n\\n';\n\nfor (const item of boletos) {\n  const p = item.json;\n  mensagem += `• Pedido #${p[\"Pedido Nº\"]}: [Clique aqui](${p[\"Link Boleto\"]})\\n`;\n}\n\nreturn [{\n  json: {\n    Mensagem: mensagem\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2060,
+        -520
+      ],
+      "id": "e4f5ba7e-d91a-4ce7-84bb-a0da59ce0055",
+      "name": "Formata Mensagem Segunda Via Boleto"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $json.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1640,
+        -520
+      ],
+      "id": "424a7dda-1106-4114-b7db-037cefd307f4",
+      "name": "Busca ID Usuario",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f0aaaa5a-3056-4055-906f-a83d6cea46c3",
+              "name": "Data",
+              "value": "={{ $now.format('dd-MM-yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "48646072-a27c-4de7-bfe8-4d4140e310b0",
+              "name": "ID",
+              "value": "={{ $json.ID }}",
+              "type": "string"
+            },
+            {
+              "id": "3928d0e7-dbce-4dea-b7bc-4b62b80c88e3",
+              "name": "Nome",
+              "value": "={{ $json.Nome }}",
+              "type": "string"
+            },
+            {
+              "id": "b71ed7b9-518f-4f8a-94b6-8320388c73bc",
+              "name": "Tipo",
+              "value": "={{ $json.Tipo }}",
+              "type": "string"
+            },
+            {
+              "id": "6b06e8b9-98cf-4ccd-b3e6-19780f7c891e",
+              "name": "Descrição",
+              "value": "={{ $('Dados').item.json.Mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "7f25339b-5de9-42a9-800e-334d625d26a2",
+              "name": "Status",
+              "value": "Aguardando",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1480,
+        -180
+      ],
+      "id": "f442e4da-3d56-46a9-b590-0c96beba1cb8",
+      "name": "DadosOcorrencia"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Dados').first().json.Mensagem }}",
+                    "rightValue": "1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "52067cb6-7e32-4446-80e2-b556b32d6601"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Consultar orçamentos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d2d5ce13-18d2-46e8-8899-5d4db42fbd28",
+                    "leftValue": "={{ $('Dados').first().json.Mensagem }}",
+                    "rightValue": "2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ver metas e comições"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "94bc8f39-cfb2-44d6-8a37-90aca4c00289",
+                    "leftValue": "={{ $('Dados').first().json.Mensagem }}",
+                    "rightValue": "3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Registrar novo orçamento"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "allMatchingOutputs": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1320,
+        680
+      ],
+      "id": "9ea3ca95-5500-451e-a829-094fb097d1ab",
+      "name": "SwitchEscolhaMenuVendedor",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Etapa }}",
+                    "rightValue": "inicio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "c5bd0be7-bc00-40c3-9df8-d9d71d610595"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Inicio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "928978f5-1f25-4cbd-b42e-0b1bf787024c",
+                    "leftValue": "={{ $json.Etapa }}",
+                    "rightValue": "menu_vendedor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Menu vendedor"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0ade643d-1562-45e8-88c6-aa96186c02f5",
+                    "leftValue": "={{ $json.Etapa }}",
+                    "rightValue": "vendedor_informar_orcamento",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ocorrencia"
+            }
+          ]
+        },
+        "options": {
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        840,
+        560
+      ],
+      "id": "4c8ffe91-3ca1-4df9-9a38-dfde0aa4923f",
+      "name": "SwitchVendedorEtapa"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1560,
+        440
+      ],
+      "id": "98e4d5e3-09ac-4d62-b44e-e6fa061d4719",
+      "name": "Enviar Envia Menu Vendedor"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Etapa": "menu_cliente ",
+            "Telefone": "={{ $('SwitchVendedorEtapa').item.json.Telefone }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Etapa",
+              "displayName": "Etapa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1780,
+        420
+      ],
+      "id": "e9df405a-b379-4c3e-a281-7ec236546774",
+      "name": "Atualiza Etapa Vendedor",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=✅ Olá {{ $json.Nome }}, identificamos você como *Vendedor*\n\nComo posso ajudar?\n1️⃣ Consultar meus orçamentos  \n2️⃣ Ver metas e comissões  \n3️⃣ Registrar novo orçamento\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1320,
+        480
+      ],
+      "id": "c62ebd10-1e11-4f27-a5ea-2373414681a1",
+      "name": "Formata Envia Menu Vendedor"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1971970750,
+          "mode": "list",
+          "cachedResultName": "orcamentos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=1971970750"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ID",
+              "lookupValue": "={{ $('SwitchVendedorEtapa').item.json.ID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1640,
+        660
+      ],
+      "id": "774d69cf-abdc-4ec6-85b7-e695477f008f",
+      "name": "Busca Orçamentos",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const orcamentos = items;\nlet mensagem = '📑 *Seus últimos orçamentos registrados:*\\n\\n';\n\nfor (const item of orcamentos) {\n  const o = item.json;\n  mensagem += `• ${o.Data} – ${o.Cliente} – ${o.Produto} x${o.Qtd} = R$ ${o.Total}\\n`;\n}\n\nreturn [{\n  json: {\n    Mensagem: mensagem\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1860,
+        660
+      ],
+      "id": "92ed59be-9555-4017-b4c8-a90c9b175721",
+      "name": "Format Mensagem Orçamentos"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.Mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2060,
+        660
+      ],
+      "id": "f796cb87-f683-4fef-9a6d-e6a33b5ffb8c",
+      "name": "Enviar Orçamentos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=✅ OI {{ $json.Nome }}*\n\nInforme seu orçamento\n/n/n\nex: \"Empresa Beta, Piso Laminado, 300, 39.90\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1640,
+        980
+      ],
+      "id": "11579bf4-402d-43c2-a9ce-d2a22fb5fd08",
+      "name": "Formata Mensagem Informe seu orçamento"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1860,
+        980
+      ],
+      "id": "eecec11a-8ad5-438f-af85-6e724af84c7a",
+      "name": "Enviar Informe seu orçamento"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Etapa": " vendedor_informar_orcamento",
+            "Telefone": "={{ $('SwitchVendedorEtapa').item.json.Telefone }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Etapa",
+              "displayName": "Etapa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2060,
+        980
+      ],
+      "id": "24d6dd9c-d371-48a0-a385-d26071c76343",
+      "name": "Atualiza Etapa Informa Orçamento",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=1971970750",
+          "__regex": "https:\\/\\/docs\\.google\\.com\\/spreadsheets\\/d\\/[0-9a-zA-Z\\-_]+.*\\#gid=([0-9]+)"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Data": "={{ $json.Data }}",
+            "Vendedor": "={{ $json.Vendedor}}",
+            "Produto": "={{ $json.Produto }}",
+            "Valor Unitário": "={{ $json.ValorUnitario}}",
+            "Total": "={{ $json.Total}}",
+            "Qtd": "={{ $json.Qtd }}",
+            "Cliente": "={{ $json.Cliente }}",
+            "ID": "{{ $json.ID}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Vendedor",
+              "displayName": "Vendedor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Produto",
+              "displayName": "Produto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Qtd",
+              "displayName": "Qtd",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Valor Unitário",
+              "displayName": "Valor Unitário",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2020,
+        1160
+      ],
+      "id": "56756f0a-aa4e-47ad-b5b3-846b19852527",
+      "name": "Cadastra uma orcamento",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2540,
+        1160
+      ],
+      "id": "1b48f2e4-28dc-47f8-97d0-3796e84a480f",
+      "name": "Enviar Confirmação registro orçamento"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Etapa": "menu_vendedor",
+            "Telefone": "={{ $('Dados').first().json.Telefone }}"
+          },
+          "matchingColumns": [
+            "Telefone"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Etapa",
+              "displayName": "Etapa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2860,
+        740
+      ],
+      "id": "ae3d5fb2-c4cd-443d-a6b9-86b79ae6486f",
+      "name": "Atualiza Etapa Cliente Vendedor",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1489700753,
+          "mode": "list",
+          "cachedResultName": "comissoes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=1489700753"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Vendedor ID",
+              "lookupValue": "={{ $('SwitchEscolhaMenuVendedor').item.json.ID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1860,
+        820
+      ],
+      "id": "4f841deb-d206-43b2-94b1-f65c6c5f5535",
+      "name": "Busca Metas e Comissões",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const comissoes = items;\nlet mensagem = '📊 *Resumo de Metas e Comissões:*\\n\\n';\n\nfor (const c of comissoes) {\n  const meta = c.json;\n  mensagem += `📅 ${meta[\"Mês\"]}\\n`;\n  mensagem += `• Meta: R$ ${meta[\"Meta\"]}\\n`;\n  mensagem += `• Vendido: R$ ${meta[\"Vendido\"]}\\n`;\n  mensagem += `• Comissão: ${meta[\"Comissão %\"]}% = R$ ${meta[\"Comissão R$\"]}\\n\\n`;\n}\n\nreturn [{\n  json: {\n    Mensagem: mensagem\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2060,
+        820
+      ],
+      "id": "82d6750e-50ea-4910-af13-ce4b0d124992",
+      "name": "Formata Mensagem Metas e Comissões"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 404925949,
+          "mode": "list",
+          "cachedResultName": "usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TpkcDiDCUyhNliOnH-Etf6D_myikM1ZBQNXW5UKq69o/edit#gid=404925949"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefone",
+              "lookupValue": "={{ $json.Telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1640,
+        820
+      ],
+      "id": "698ca278-6edd-4cf5-b1e2-10d260d08543",
+      "name": "Busca ID Vendedor",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "N8nI5ifxXAX9WPii",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.Mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2300,
+        820
+      ],
+      "id": "9f8142df-05bd-41f1-be4f-aed802aee731",
+      "name": "Enviar Metas e Comissões"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ex: \"Empresa Beta, Piso Laminado, 300, 39.90\"\n\ntry {\n  const entrada = $('Dados').first().json.Mensagem; \n  const partes = entrada.split(',');\n\n  if (partes.length < 4) throw new Error('Formato incorreto');\n\n  const cliente = partes[0].trim();\n  const produto = partes[1].trim();\n  const qtd = parseInt(partes[2]);\n  const valorUnit = parseFloat(partes[3]);\n  const total = qtd * valorUnit;\n  const data = new Date().toLocaleDateString('pt-BR');\n\n  return [{\n    json: {\n      ID: $('SwitchTipo').first().json.ID,\n      Data: data,\n      Vendedor: $('Dados').first().json.Nome,\n      Cliente: cliente,\n      Produto: produto,\n      Qtd: qtd,\n      ValorUnitario: valorUnit.toFixed(2),\n      Total: total.toFixed(2)\n    }\n  }];\n} catch (err) {\n  return [{\n    json: {\n      mensagem: \"⚠️ Não consegui entender o orçamento. Tente seguir este modelo:\\n\\n\\\"Nome do Cliente, Produto, Quantidade, Valor\\\"\\n\\nExemplo: Loja Beta, Piso Laminado, 300, 39.90\"\n    }\n  }];\n}\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1500,
+        1160
+      ],
+      "id": "d5fe78e2-bf7a-4941-96af-cc747a0c74eb",
+      "name": "Formata Orçamento",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=❌ Opção inválida. Por favor, escolha uma das opções do menu abaixo 👇",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1480,
+        0
+      ],
+      "id": "b1d4a313-0270-4334-b483-72bc7649f774",
+      "name": "Formata Mensagem Informe Opção invalida menu cliente"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1740,
+        0
+      ],
+      "id": "6ea86f42-bfba-4808-a91b-b349f8ed7b09",
+      "name": "Enviar Mensagem invalida menu cliente"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=❌ Opção inválida. Por favor, escolha uma das opções do menu abaixo 👇",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1340,
+        1460
+      ],
+      "id": "ba619568-afea-4315-8a83-5b3a71811613",
+      "name": "Formata Mensagem Informe Opção invalida menu vendedor"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1620,
+        1460
+      ],
+      "id": "c69ccbc9-b4f4-4106-8561-cda63ca24dc0",
+      "name": "Enviar Mensagem invalida menu vendedor"
+    },
+    {
+      "parameters": {
+        "jsCode": "const nome = $('Dados').first().json.Nome;\nconst dados = $json;\n\nreturn [{\n  json: {\n    mensagem: `✅ Oi ${nome}, seu orçamento foi salvo com sucesso!\\n\\n📅 Data: ${dados.Data}\\n👤 Cliente: ${dados.Cliente}\\n📦 Produto: ${dados.Produto}\\n🔢 Quantidade: ${dados.Qtd}\\n💲 Valor Unitário: R$ ${dados[\"Valor Unitário\"]}\\n💰 Total: R$ ${dados.Total}`\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2300,
+        1160
+      ],
+      "id": "d8a46ed4-64e2-4436-8796-f0473505b1ab",
+      "name": "Formata Mensagem Confirmação cadastro Metas e Comissões",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1980,
+        1380
+      ],
+      "id": "2fb39c92-4021-43ee-84bf-98e1524a73c2",
+      "name": "Enviar mensagem de erro orçamento"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c6a52311-40fa-44d6-b71b-b74da6727891",
+                    "leftValue": "={{ $json.Vendedor}}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Orçamento correto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "72e6a791-9de9-497d-a551-05f75f244892",
+                    "leftValue": "={{ $json.Vendedor}}",
+                    "rightValue": "sfasd",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "empty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Erro Orçamento"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1720,
+        1220
+      ],
+      "id": "75c661f1-f923-4bc9-857a-00f6926cba48",
+      "name": "Switch Verifica orçamento"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3100,
+        740
+      ],
+      "id": "13036e64-dfd2-4a0f-80b0-ff869c6be955",
+      "name": "Wait",
+      "webhookId": "b869e14f-929f-4860-b1d5-c681a336a9af"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=✅ Olá *Vendedor* {{ $json.Nome }}\n\nComo posso ajudar?\n1️⃣ Consultar meus orçamentos  \n2️⃣ Ver metas e comissões  \n3️⃣ Registrar novo orçamento\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3300,
+        740
+      ],
+      "id": "54f90b4e-4d30-46b3-9e68-c42b2708882f",
+      "name": "Formata Envia Menu Vendedor1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3500,
+        740
+      ],
+      "id": "5d101dca-5204-4246-8a34-5934dc85f668",
+      "name": "Enviar Menu novamente vendedor"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2940,
+        -600
+      ],
+      "id": "d98973fe-f3d0-4f44-997b-699476d24081",
+      "name": "Wait1",
+      "webhookId": "b869e14f-929f-4860-b1d5-c681a336a9af"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "348e4ae6-3af7-4c6c-b8e8-b08c49d29917",
+              "name": "mensagem",
+              "value": "=✅ Olá *Vendedor* {{ $json.Nome }}\n\nComo posso ajudar?\n1️⃣ Consultar meus orçamentos  \n2️⃣ Ver metas e comissões  \n3️⃣ Registrar novo orçamento\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3140,
+        -600
+      ],
+      "id": "992c3531-46cf-49a8-bdfe-4e8bafe484fa",
+      "name": "Formata Envia Menu Vendedor2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://apinocode01.megaapi.com.br/rest/sendMessage/megacode-MHB2RjOESdc/text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer MHB2RjOESdc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  messageData: {\n    to: $('Dados').first().json.Telefone + '@s.whatsapp.net',\n    text: $json.mensagem\n  }\n}) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3340,
+        -600
+      ],
+      "id": "d5f15cd5-8e84-4498-801b-30fe16659743",
+      "name": "Enviar Menu novamente vendedor1"
+    }
+  ],
+  "pinData": {
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "user-agent": "axios/1.7.7",
+            "content-length": "644",
+            "accept-encoding": "gzip,br",
+            "host": "n8n.territoriopaulista.com.br",
+            "xxxxxxxxxx": "close",
+            "x-forwarded-for": "5.78.66.98",
+            "connection": "keep-alive",
+            "x-forwarded-host": "n8n.territoriopaulista.com.br",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "instance_key": "megacode-MHB2RjOESdc",
+            "jid": "5511950768360@s.whatsapp.net",
+            "messageType": "conversation",
+            "key": {
+              "remoteJid": "5511962679023@s.whatsapp.net",
+              "fromMe": false,
+              "id": "00709CC60046C6C622B82D8D0E638515"
+            },
+            "messageTimestamp": 1745279950,
+            "pushName": "Rogério Lopes",
+            "broadcast": false,
+            "message": {
+              "conversation": "Teclogic, Revestimento, 300, 39.90",
+              "messageContextInfo": {
+                "deviceListMetadata": {
+                  "senderKeyHash": "T8Fu4OZgTrvrug==",
+                  "senderTimestamp": "1744721924",
+                  "recipientKeyHash": "+rf0g7ZsoJr6ZQ==",
+                  "recipientTimestamp": "1744318586"
+                },
+                "deviceListMetadataVersion": 2,
+                "messageSecret": "6cSxEinYZdrTFOHgH42dqgG0LNtzKFI7nEScbEju+KQ="
+              }
+            },
+            "isGroup": false
+          },
+          "webhookUrl": "https://n8n.territoriopaulista.com.br/webhook/megaapi",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "SwitchTipo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SwitchTipo": {
+      "main": [
+        [
+          {
+            "node": "SwitchClienteEtapa",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SwitchVendedorEtapa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SwitchClienteEtapa": {
+      "main": [
+        [
+          {
+            "node": "Formata Envia Menu Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SwitchEscolhaMenuCliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "DadosOcorrencia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SwitchEscolhaMenuCliente": {
+      "main": [
+        [
+          {
+            "node": "Busca Pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Busca ID Usuario",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formata Mensagem Informe sua ocorrência",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formata Mensagem Informe Opção invalida menu cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Pedidos": {
+      "main": [
+        [
+          {
+            "node": "Format Mensagem Pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Envia Menu Cliente": {
+      "main": [
+        [
+          {
+            "node": "Enviar Envia Menu Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Envia Menu Cliente": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Pedidos": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Cliente Inicio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Segunda via de boleto": {
+      "main": [
+        [
+          {
+            "node": "Formata Mensagem Segunda Via Boleto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Segunda Via do Boleto": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Cliente Inicio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Informe sua ocorrência": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Informa Ocorrência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Confirmação registro ocorrência": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Cliente Inicio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Mensagem Informe sua ocorrência": {
+      "main": [
+        [
+          {
+            "node": "Enviar Informe sua ocorrência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Mensagem Confirmação Ocorrência": {
+      "main": [
+        [
+          {
+            "node": "Enviar Confirmação registro ocorrência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cadastra uma ocorrência": {
+      "main": [
+        [
+          {
+            "node": "Formata Mensagem Confirmação Ocorrência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Mensagem Pedidos": {
+      "main": [
+        [
+          {
+            "node": "Enviar Pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Mensagem Segunda Via Boleto": {
+      "main": [
+        [
+          {
+            "node": "Enviar Segunda Via do Boleto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca ID Usuario": {
+      "main": [
+        [
+          {
+            "node": "Busca Segunda via de boleto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DadosOcorrencia": {
+      "main": [
+        [
+          {
+            "node": "Cadastra uma ocorrência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SwitchEscolhaMenuVendedor": {
+      "main": [
+        [
+          {
+            "node": "Busca Orçamentos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Busca ID Vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formata Mensagem Informe seu orçamento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formata Mensagem Informe Opção invalida menu vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SwitchVendedorEtapa": {
+      "main": [
+        [
+          {
+            "node": "Formata Envia Menu Vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SwitchEscolhaMenuVendedor",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formata Orçamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Envia Menu Vendedor": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Envia Menu Vendedor": {
+      "main": [
+        [
+          {
+            "node": "Enviar Envia Menu Vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Orçamentos": {
+      "main": [
+        [
+          {
+            "node": "Format Mensagem Orçamentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Mensagem Orçamentos": {
+      "main": [
+        [
+          {
+            "node": "Enviar Orçamentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Orçamentos": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Cliente Vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Mensagem Informe seu orçamento": {
+      "main": [
+        [
+          {
+            "node": "Enviar Informe seu orçamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Informe seu orçamento": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Informa Orçamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cadastra uma orcamento": {
+      "main": [
+        [
+          {
+            "node": "Formata Mensagem Confirmação cadastro Metas e Comissões",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Confirmação registro orçamento": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Cliente Vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Metas e Comissões": {
+      "main": [
+        [
+          {
+            "node": "Formata Mensagem Metas e Comissões",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Mensagem Metas e Comissões": {
+      "main": [
+        [
+          {
+            "node": "Enviar Metas e Comissões",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca ID Vendedor": {
+      "main": [
+        [
+          {
+            "node": "Busca Metas e Comissões",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Metas e Comissões": {
+      "main": [
+        [
+          {
+            "node": "Atualiza Etapa Cliente Vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Orçamento": {
+      "main": [
+        [
+          {
+            "node": "Switch Verifica orçamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Mensagem Informe Opção invalida menu cliente": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem invalida menu cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Mensagem Informe Opção invalida menu vendedor": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem invalida menu vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Mensagem Confirmação cadastro Metas e Comissões": {
+      "main": [
+        [
+          {
+            "node": "Enviar Confirmação registro orçamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Verifica orçamento": {
+      "main": [
+        [
+          {
+            "node": "Cadastra uma orcamento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar mensagem de erro orçamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualiza Etapa Cliente Vendedor": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Formata Envia Menu Vendedor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Envia Menu Vendedor1": {
+      "main": [
+        [
+          {
+            "node": "Enviar Menu novamente vendedor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Formata Envia Menu Vendedor2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata Envia Menu Vendedor2": {
+      "main": [
+        [
+          {
+            "node": "Enviar Menu novamente vendedor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualiza Etapa Cliente Inicio": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "f78f5014-6d16-4f3f-9f80-d1becd32a4a4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dd3173afe24bd239a195160d1d437dbdd7957c8fd0002c7ca0ea71a09eb146a0"
+  },
+  "id": "LlUwbHsoqmcCYg3l",
+  "tags": [
+    {
+      "createdAt": "2025-04-11T23:37:06.286Z",
+      "updatedAt": "2025-04-11T23:37:06.286Z",
+      "id": "EVJ85NiRW5kXzD0T",
+      "name": "MegaAPI"
+    },
+    {
+      "createdAt": "2025-04-18T02:45:41.711Z",
+      "updatedAt": "2025-04-18T02:45:41.711Z",
+      "id": "a7hkN5ueQoP5tAOf",
+      "name": "Google Sheets"
+    },
+    {
+      "createdAt": "2025-04-11T23:36:39.347Z",
+      "updatedAt": "2025-04-11T23:36:39.347Z",
+      "id": "mP5uEM6c0luWzDmJ",
+      "name": "WhatsApp"
+    }
+  ]
+}
